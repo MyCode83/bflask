@@ -35,7 +35,7 @@ var signCmd = &cobra.Command{
 			fmt.Fprintln(cmd.OutOrStdout(), cookie)
 			return nil
 		}
-		fmt.Fprintln(cmd.OutOrStdout(), cookie)
+		fmt.Fprintf(cmd.OutOrStdout(), "Signed cookie: %s\n", cookie)
 		return nil
 	},
 }
