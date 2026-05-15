@@ -51,10 +51,10 @@ Print only the recovered `SECRET_KEY`:
 bflask -q crack -c "$COOKIE" -w keys.txt
 ```
 
-Sign a cookie:
+Sign a cookie and print only the cookie value:
 
 ```bash
-bflask sign -k supersecret -p '{"user":"admin"}' -s cookie-session -d sha256
+bflask -q sign -k supersecret -p '{"user":"admin"}' -s cookie-session -d sha256
 ```
 
 Decode a cookie payload:
