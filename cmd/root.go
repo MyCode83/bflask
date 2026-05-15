@@ -24,8 +24,11 @@ func Execute() error {
 }
 
 var rootCmd = &cobra.Command{
-	Use:           "bflask",
-	Short:         "Bruteforce Flask signed session cookies",
+	Use:   "bflask",
+	Short: "Bruteforce Flask signed session cookies",
+	CompletionOptions: cobra.CompletionOptions{
+		DisableDefaultCmd: true,
+	},
 	SilenceUsage:  true,
 	SilenceErrors: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
