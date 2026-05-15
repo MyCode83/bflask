@@ -11,7 +11,7 @@ This project started as a Codex experiment. I expected it to barely work, but af
 ## Install
 
 ```bash
-go install .
+go install github.com/MyCode83/bflask@latest
 ```
 
 From this source tree:
