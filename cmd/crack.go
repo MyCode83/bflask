@@ -11,10 +11,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"bflask/internal/config"
-	"bflask/internal/logging"
-	"bflask/internal/output"
-	"bflask/pkg/bflask"
+	"github.com/MyCode83/bflask/internal/config"
+	"github.com/MyCode83/bflask/internal/logging"
+	"github.com/MyCode83/bflask/internal/output"
+	"github.com/MyCode83/bflask/pkg/bflask"
 )
 
 var crackCmd = &cobra.Command{

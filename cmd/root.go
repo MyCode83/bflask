@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"bflask/internal/config"
+	"github.com/MyCode83/bflask/internal/config"
 )
 
 var (

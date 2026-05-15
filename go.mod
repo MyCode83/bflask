@@ -1,4 +1,4 @@
-module bflask
+module github.com/MyCode83/bflask
 
 go 1.25.4
 

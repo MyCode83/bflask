@@ -8,7 +8,7 @@ import (
 
 	"github.com/fatih/color"
 
-	"bflask/pkg/bflask"
+	"github.com/MyCode83/bflask/pkg/bflask"
 )
 
 type Printer struct {

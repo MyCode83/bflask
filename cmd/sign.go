@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"bflask/pkg/bflask"
+	"github.com/MyCode83/bflask/pkg/bflask"
 )
 
 var signOpts struct {

@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"bflask/cmd"
+	"github.com/MyCode83/bflask/cmd"
 )
 
 func main() {

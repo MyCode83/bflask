@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"bflask/pkg/bflask"
+	"github.com/MyCode83/bflask/pkg/bflask"
 )
 
 func TestFoundQuietPrintsOnlySecretKey(t *testing.T) {
