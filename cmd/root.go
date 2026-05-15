@@ -31,6 +31,12 @@ var rootCmd = &cobra.Command{
 	},
 	SilenceUsage:  true,
 	SilenceErrors: true,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if cfgFile == "" {
+			return cmd.Help()
+		}
+		return crackCmd.RunE(cmd, args)
+	},
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		config.Defaults(v)
 		if err := config.Setup(v, cfgFile); err != nil {
