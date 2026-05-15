@@ -31,6 +31,10 @@ var signCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+		if v.GetBool("quiet") {
+			fmt.Fprintln(cmd.OutOrStdout(), cookie)
+			return nil
+		}
 		fmt.Fprintln(cmd.OutOrStdout(), cookie)
 		return nil
 	},

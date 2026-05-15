@@ -26,7 +26,7 @@ var decodeCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		if decodeOpts.raw {
+		if decodeOpts.raw || v.GetBool("quiet") {
 			fmt.Fprintln(cmd.OutOrStdout(), string(payload))
 			return nil
 		}
