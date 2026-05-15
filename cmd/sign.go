@@ -44,8 +44,8 @@ func init() {
 	flags := signCmd.Flags()
 	flags.StringVarP(&signOpts.secret, "secret", "k", "", "SECRET_KEY used to sign the cookie")
 	flags.StringVarP(&signOpts.payload, "payload", "p", "", "JSON payload to sign")
-	flags.StringVar(&signOpts.salt, "salt", "cookie-session", "itsdangerous signer salt")
-	flags.StringVar(&signOpts.digest, "digest", "sha1", "digest algorithm: sha1, sha224, sha256, sha384, sha512, md5")
+	flags.StringVarP(&signOpts.salt, "salt", "s", "cookie-session", "itsdangerous signer salt")
+	flags.StringVarP(&signOpts.digest, "digest", "d", "sha1", "digest algorithm: sha1, sha224, sha256, sha384, sha512, md5")
 
 	rootCmd.AddCommand(signCmd)
 }
