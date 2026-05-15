@@ -3,6 +3,7 @@
 `bflask` is a Go CLI for authorized Flask signed session cookie testing. It bruteforces possible Flask `SECRET_KEY` values from a wordlist and verifies signatures with `github.com/octopart/go-itsdangerous`.
 
 Use it only against applications you own or have explicit permission to test, and in CTF/lab environments.
+This project started as a Codex experiment. I expected it to barely work, but after testing it in real CTF scenarios it performed well, so I decided to publish it.
 
 ## Install
 
