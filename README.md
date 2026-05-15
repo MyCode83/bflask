@@ -1,4 +1,7 @@
 # bflask
+![Go](https://img.shields.io/badge/-blue?logo=go)
+![go-itsdangerous](https://img.shields.io/badge/go--itsdangerous-compatible-blue)
+![bflask](https://img.shields.io/badge/bflask-CLI-064E3B)
 
 `bflask` is a Go CLI for authorized Flask signed session cookie testing. It bruteforces possible Flask `SECRET_KEY` values from a wordlist and verifies signatures with `github.com/octopart/go-itsdangerous`.
 
