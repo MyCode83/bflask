@@ -1,0 +1,10 @@
+cookie: ""
+wordlist: "./wordlist.txt"
+threads: 50
+salt: "cookie-session"
+digest: "sha1"
+verbose: false
+timeout: "0s"
+output: ""
+json: false
+quiet: false
