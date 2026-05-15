@@ -1,0 +1,49 @@
+package cmd
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
+	"bflask/internal/config"
+)
+
+var (
+	cfgFile string
+	v       = viper.New()
+)
+
+func Execute() error {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
+		return err
+	}
+	return nil
+}
+
+var rootCmd = &cobra.Command{
+	Use:           "bflask",
+	Short:         "Bruteforce Flask signed session cookies",
+	SilenceUsage:  true,
+	SilenceErrors: true,
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		config.Defaults(v)
+		if err := config.Setup(v, cfgFile); err != nil {
+			return fmt.Errorf("load config: %w", err)
+		}
+		return nil
+	},
+}
+
+func init() {
+	flags := rootCmd.PersistentFlags()
+	flags.StringVar(&cfgFile, "config", "", "config file")
+	flags.BoolP("quiet", "q", false, "print only command results")
+	if err := v.BindPFlag("quiet", flags.Lookup("quiet")); err != nil {
+		panic(err)
+	}
+
+	rootCmd.AddCommand(crackCmd)
+}

@@ -88,7 +88,6 @@ func init() {
 	flags.Duration("timeout", 0, "overall timeout, for example 30s or 5m")
 	flags.StringP("output", "o", "", "write successful result to a file")
 	flags.BoolP("json", "j", false, "emit JSON result")
-	flags.BoolP("quiet", "q", false, "print only the recovered SECRET_KEY")
 
 	mustBind("cookie")
 	mustBind("wordlist")
@@ -99,7 +98,6 @@ func init() {
 	mustBind("timeout")
 	mustBind("output")
 	mustBind("json")
-	mustBind("quiet")
 }
 
 func mustBind(key string) {
