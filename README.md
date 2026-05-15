@@ -125,7 +125,7 @@ cd examples/flask
 python -m flask --app app run
 ```
 
-Visit `http://127.0.0.1:5000/`, copy the `session` cookie, and test it with a wordlist containing `super secret 1`.
+Visit `http://127.0.0.1:5000/`, copy the `session` cookie, and test it with a wordlist containing `supersecret`, salt `11`, digest `sha256`.
 
 ## Troubleshooting
 
