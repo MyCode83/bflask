@@ -45,6 +45,30 @@ Write the hit to a file:
 bflask crack -c "$COOKIE" -w keys.txt -o result.json
 ```
 
+Print only the recovered `SECRET_KEY`:
+
+```bash
+bflask -q crack -c "$COOKIE" -w keys.txt
+```
+
+Sign a cookie:
+
+```bash
+bflask sign -k supersecret -p '{"user":"admin"}' -s cookie-session -d sha256
+```
+
+Decode a cookie payload:
+
+```bash
+bflask decode -c "$COOKIE"
+```
+
+Decode only the raw payload:
+
+```bash
+bflask -q decode -c "$COOKIE"
+```
+
 ## Configuration
 
 Priority is `CLI > ENV > CONFIG > DEFAULT`.
@@ -84,6 +108,15 @@ Compressed Flask cookies start with a leading `.`. `bflask` supports decoding th
 
 ## Flags
 
+Global flags:
+
+```text
+--config string         config file
+--quiet, -q             print only command results
+```
+
+Crack flags:
+
 ```text
 --cookie, -c string      Flask signed session cookie
 --wordlist, -w string    path to SECRET_KEY wordlist
@@ -94,7 +127,22 @@ Compressed Flask cookies start with a leading `.`. `bflask` supports decoding th
 --timeout duration   overall timeout, for example 30s or 5m
 --output, -o string      write successful result to a file
 --json, -j               emit JSON result
---quiet, -q              print only the recovered SECRET_KEY
+```
+
+Sign flags:
+
+```text
+--secret, -k string      SECRET_KEY used to sign the cookie
+--payload, -p string     JSON payload to sign
+--salt, -s string        itsdangerous signer salt (default "cookie-session")
+--digest, -d string      sha1, sha224, sha256, sha384, sha512, md5 (default "sha1")
+```
+
+Decode flags:
+
+```text
+--cookie, -c string      Flask signed session cookie
+--raw                   print decoded payload without JSON formatting
 ```
 
 ## Project Tree
