@@ -3,10 +3,9 @@ package bflask
 import (
 	"context"
 	"errors"
+	"sync"
 	"sync/atomic"
 	"time"
-
-	"github.com/alitto/pond/v2"
 )
 
 var ErrNotFound = errors.New("secret key not found")
@@ -55,6 +54,7 @@ func (e *Engine) CountCandidates() (int64, error) {
 
 func (e *Engine) Crack(ctx context.Context, loaded int64) (Result, error) {
 	start := time.Now()
+	parentCtx := ctx
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -63,87 +63,109 @@ func (e *Engine) Crack(ctx context.Context, loaded int64) (Result, error) {
 	errs := make(chan error, 1)
 
 	var checked atomic.Int64
-
-	pool := pond.NewPool(e.opts.Threads)
-	defer pool.StopAndWait()
+	stats := func() Stats {
+		return Stats{Loaded: loaded, Checked: checked.Load(), Elapsed: time.Since(start)}
+	}
+	sendErr := func(err error) {
+		if err == nil || errors.Is(err, context.Canceled) {
+			return
+		}
+		select {
+		case errs <- err:
+			cancel()
+		default:
+		}
+	}
 
 	go func() {
 		defer close(jobs)
-		if err := StreamCandidates(ctx, e.opts.Wordlist, jobs); err != nil && !errors.Is(err, context.Canceled) {
-			select {
-			case errs <- err:
-			default:
-			}
-		}
+		sendErr(StreamCandidates(ctx, e.opts.Wordlist, jobs))
 	}()
 
-	submitDone := make(chan struct{})
-	go func() {
-		defer close(submitDone)
-		for candidate := range jobs {
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-			candidate := candidate
-			task := pool.SubmitErr(func() error {
+	var wg sync.WaitGroup
+	for range e.opts.Threads {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for {
 				select {
 				case <-ctx.Done():
-					return ctx.Err()
-				default:
-				}
+					return
+				case candidate, ok := <-jobs:
+					if !ok {
+						return
+					}
 
-				payload, ok, err := e.verifier.Verify(candidate)
-				checked.Add(1)
-				if err != nil || !ok {
-					return err
-				}
+					payload, ok, err := e.verifier.Verify(candidate)
+					checked.Add(1)
+					if err != nil {
+						sendErr(err)
+						return
+					}
+					if !ok {
+						continue
+					}
 
-				cancel()
-				r := Result{
-					Found:      true,
-					SecretKey:  candidate,
-					Payload:    PrettyPayload(payload),
-					RawPayload: string(payload),
-					Stats: Stats{
-						Loaded:  loaded,
-						Checked: checked.Load(),
-						Elapsed: time.Since(start),
-					},
+					r := Result{
+						Found:      true,
+						SecretKey:  candidate,
+						Payload:    PrettyPayload(payload),
+						RawPayload: string(payload),
+						Stats:      stats(),
+					}
+					select {
+					case result <- r:
+						cancel()
+					default:
+					}
+					return
 				}
-				select {
-				case result <- r:
-				default:
-				}
-				return nil
-			})
-			_ = task
-		}
+			}
+		}()
+	}
+
+	workersDone := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(workersDone)
 	}()
 
 	select {
 	case r := <-result:
-		<-submitDone
-		r.Stats.Checked = checked.Load()
-		r.Stats.Elapsed = time.Since(start)
+		cancel()
+		<-workersDone
+		r.Stats = stats()
 		return r, nil
 	case err := <-errs:
 		cancel()
-		<-submitDone
-		return Result{Stats: Stats{Loaded: loaded, Checked: checked.Load(), Elapsed: time.Since(start)}}, err
-	case <-submitDone:
-		pool.StopAndWait()
+		<-workersDone
+		return Result{Stats: stats()}, err
+	case <-workersDone:
 		select {
 		case r := <-result:
-			r.Stats.Checked = checked.Load()
-			r.Stats.Elapsed = time.Since(start)
+			r.Stats = stats()
 			return r, nil
+		case err := <-errs:
+			return Result{Stats: stats()}, err
 		default:
 		}
-		return Result{Stats: Stats{Loaded: loaded, Checked: checked.Load(), Elapsed: time.Since(start)}}, ErrNotFound
+		if err := parentCtx.Err(); err != nil {
+			return Result{Stats: stats()}, err
+		}
+		return Result{Stats: stats()}, ErrNotFound
 	case <-ctx.Done():
-		<-submitDone
-		return Result{Stats: Stats{Loaded: loaded, Checked: checked.Load(), Elapsed: time.Since(start)}}, ctx.Err()
+		<-workersDone
+		select {
+		case r := <-result:
+			r.Stats = stats()
+			return r, nil
+		case err := <-errs:
+			return Result{Stats: stats()}, err
+		default:
+		}
+		if err := parentCtx.Err(); err != nil {
+			return Result{Stats: stats()}, err
+		}
+		return Result{Stats: stats()}, ErrNotFound
 	}
 }

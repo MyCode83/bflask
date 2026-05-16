@@ -3,7 +3,6 @@ module github.com/MyCode83/bflask
 go 1.25.4
 
 require (
-	github.com/alitto/pond/v2 v2.7.1
 	github.com/fatih/color v1.19.0
 	github.com/octopart/go-itsdangerous v0.0.0-20160927192926-83a6623953d0
 	github.com/rs/zerolog v1.35.1
