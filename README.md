@@ -116,6 +116,7 @@ Global flags:
 ```text
 --config string         config file
 --quiet, -q             print only command results
+--version               version for bflask
 ```
 
 Crack flags:

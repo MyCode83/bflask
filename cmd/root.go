@@ -15,6 +15,8 @@ var (
 	v       = viper.New()
 )
 
+const Version = "0.9v"
+
 func Execute() error {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
@@ -24,8 +26,9 @@ func Execute() error {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "bflask",
-	Short: "Bruteforce Flask signed session cookies",
+	Use:     "bflask",
+	Short:   "Bruteforce Flask signed session cookies",
+	Version: Version,
 	CompletionOptions: cobra.CompletionOptions{
 		DisableDefaultCmd: true,
 	},
