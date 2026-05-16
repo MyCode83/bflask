@@ -3,9 +3,10 @@ package bflask
 import (
 	"context"
 	"errors"
-	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/sourcegraph/conc"
 )
 
 var ErrNotFound = errors.New("secret key not found")
@@ -82,11 +83,9 @@ func (e *Engine) Crack(ctx context.Context, loaded int64) (Result, error) {
 		sendErr(StreamCandidates(ctx, e.opts.Wordlist, jobs))
 	}()
 
-	var wg sync.WaitGroup
+	var wg conc.WaitGroup
 	for range e.opts.Threads {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			for {
 				select {
 				case <-ctx.Done():
@@ -121,7 +120,7 @@ func (e *Engine) Crack(ctx context.Context, loaded int64) (Result, error) {
 					return
 				}
 			}
-		}()
+		})
 	}
 
 	workersDone := make(chan struct{})
