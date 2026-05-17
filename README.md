@@ -10,18 +10,25 @@
 > [!WARNING]
 > Use this tool only in authorized security testing, educational labs, and CTF environments.
 
+## Benchmark
+
+| Tool | Time |
+|------|------|
+| flask-unsign | 677.76s |
+| bflask | **48.54s** |
+
+![bflask benchmark](doc/benchmark.jpg)
+
 ## Install
 
 ```bash
 go install github.com/MyCode83/bflask@latest
 ```
 
-From this source tree:
+From source:
 
 ```bash
-go build ./...
-go build -o bflask .
-go build -o bflask ./cmd/bflask
+go build .
 ```
 > [!IMPORTANT]
 > Requires Go 1.25 or newer.
@@ -77,11 +84,6 @@ Decode only the raw payload:
 bflask -q decode -c "$COOKIE" --raw
 ```
 
-## Benchmark
-
-![bflask benchmark](doc/benchmark.jpg)
-### **flask-unsign**: 677.76s
-### **bflask**: 48.54s
 
 ## Configuration
 
@@ -123,46 +125,6 @@ subcommand prints help.
 Flask's default session stores data client-side and signs it with `SECRET_KEY` through itsdangerous. The data is not encrypted. If the signing key is guessed, the payload can be verified and decoded. `bflask` checks candidate keys with URLSafeTimedSerializer-compatible HMAC signing, `cookie-session` salt by default, and SHA-1 by default.
 
 Compressed Flask cookies start with a leading `.`. `bflask` supports decoding these zlib-compressed payloads when a valid key is found.
-
-## Flags
-
-Global flags:
-
-```text
---config string         config file
---quiet, -q             print only command results
---version               version for bflask
-```
-
-Crack flags:
-
-```text
---cookie, -c string      Flask signed session cookie
---wordlist, -w string    path to SECRET_KEY wordlist
---threads, -t int        number of concurrent workers (default 50)
---salt, -s string        itsdangerous signer salt (default "cookie-session")
---digest, -d string      sha1, sha224, sha256, sha384, sha512, md5 (default "sha1")
---verbose, -v            enable verbose logging
---timeout duration   overall timeout, for example 30s or 5m
---output, -o string      write successful result to a file
---json, -j               emit JSON result
-```
-
-Sign flags:
-
-```text
---secret, -k string      SECRET_KEY used to sign the cookie
---payload, -p string     JSON payload to sign
---salt, -s string        itsdangerous signer salt (default "cookie-session")
---digest, -d string      sha1, sha224, sha256, sha384, sha512, md5 (default "sha1")
-```
-
-Decode flags:
-
-```text
---cookie, -c string      Flask signed session cookie
---raw                   print decoded payload without JSON formatting
-```
 
 ## Sample Flask App
 
