@@ -7,8 +7,8 @@
 >
 > Started as a Codex test and later published after working well in CTFs.
 
-Use this tool only in authorized security testing, educational labs, and CTF
-environments.
+> [!WARNING]
+> Use this tool only in authorized security testing, educational labs, and CTF environments.
 
 ## Install
 
@@ -23,8 +23,8 @@ go build ./...
 go build -o bflask .
 go build -o bflask ./cmd/bflask
 ```
-
-Requires Go 1.25 or newer.
+> [!IMPORTANT]
+> Requires Go 1.25 or newer.
 
 ## Usage
 
