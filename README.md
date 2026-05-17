@@ -77,6 +77,10 @@ Decode only the raw payload:
 bflask -q decode -c "$COOKIE"
 ```
 
+## Benchmark
+
+![bflask benchmark](doc/benchmark.jpg)
+
 ## Configuration
 
 Priority is `CLI > ENV > CONFIG > DEFAULT`.
@@ -156,25 +160,6 @@ Decode flags:
 ```text
 --cookie, -c string      Flask signed session cookie
 --raw                   print decoded payload without JSON formatting
-```
-
-## Project Tree
-
-```text
-.
-├── cmd/
-├── internal/
-│   ├── config/
-│   ├── logging/
-│   └── output/
-├── pkg/
-│   └── bflask/
-├── examples/
-│   └── flask/
-├── config.yaml
-├── go.mod
-├── main.go
-└── README.md
 ```
 
 ## Sample Flask App
