@@ -74,7 +74,7 @@ bflask decode -c "$COOKIE"
 Decode only the raw payload:
 
 ```bash
-bflask -q decode -c "$COOKIE"
+bflask -q decode -c "$COOKIE" --raw
 ```
 
 ## Benchmark
