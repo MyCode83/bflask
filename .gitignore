@@ -1,3 +1,5 @@
 *.exe
 *.txt
 cmd/bflask/config.yaml
+# Added by goreleaser init:
+dist/
