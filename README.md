@@ -80,6 +80,8 @@ bflask -q decode -c "$COOKIE" --raw
 ## Benchmark
 
 ![bflask benchmark](doc/benchmark.jpg)
+### **flask-unsign**: 677.76s
+### **bflask**: 48.54s
 
 ## Configuration
 
