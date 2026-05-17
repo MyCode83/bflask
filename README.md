@@ -1,11 +1,14 @@
 # bflask
-![Go](https://img.shields.io/badge/-blue?logo=go)
+![Go](https://img.shields.io/badge/Go-1.25-blue?logo=go)
 ![go-itsdangerous](https://img.shields.io/badge/go--itsdangerous-compatible-blue)
 ![bflask](https://img.shields.io/badge/bflask-CLI-064E3B)
 
 > Fast Go CLI for bruteforcing Flask signed session cookies.
 >
 > Started as a Codex test and later published after working well in CTFs.
+
+Use this tool only in authorized security testing, educational labs, and CTF
+environments.
 
 ## Install
 
@@ -20,6 +23,8 @@ go build ./...
 go build -o bflask .
 go build -o bflask ./cmd/bflask
 ```
+
+Requires Go 1.25 or newer.
 
 ## Usage
 
@@ -102,6 +107,10 @@ Environment variables use the `BFLASK_` prefix:
 ```bash
 BFLASK_THREADS=200 BFLASK_DIGEST=sha256 bflask crack -c "$COOKIE" -w keys.txt
 ```
+
+Running `bflask --config config.yaml` without a subcommand starts `crack` with
+the values from the config file. Running `bflask` without a config file or
+subcommand prints help.
 
 ## How Flask Cookies Work
 
