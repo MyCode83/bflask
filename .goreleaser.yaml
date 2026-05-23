@@ -9,9 +9,7 @@ before:
 
 builds:
   - id: bflask
-
     main: .
-
     binary: bflask
 
     env:
@@ -29,7 +27,6 @@ builds:
 
 archives:
   - id: default
-
     formats:
       - tar.gz
 
@@ -50,9 +47,35 @@ checksum:
   name_template: checksums.txt
 
 changelog:
+  use: git
   sort: asc
+  abbrev: -1
+  title: "Changes"
+
+  groups:
+    - title: "Features"
+      regexp: '^.*?(feat|feature)(\([[:word:]-]+\))??!?:.+$'
+      order: 0
+
+    - title: "Bug fixes"
+      regexp: '^.*?fix(\([[:word:]-]+\))??!?:.+$'
+      order: 1
+
+    - title: "Other changes"
+      order: 999
+
+  filters:
+    include:
+      - '^feat(\([[:word:]-]+\))??!?:'
+      - '^feature(\([[:word:]-]+\))??!?:'
+      - '^fix(\([[:word:]-]+\))??!?:'
 
 release:
+  header: |
+    ## bflask {{ .Tag }}
+
+    This release includes the following changes:
+
   footer: |
 
     ---
